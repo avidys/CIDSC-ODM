@@ -9,7 +9,8 @@
 
 library(XML)
 
-fileName <- "./odm1.3_fullAll_items_2013-01-30-094910395.xml/odm1.3_fullAll_items_2013-01-30-094910395.xml"
+list.files("./data")
+fileName <- "./data/odm1.3_fullAll_items_2013-01-30-094910395.xml"
 
 getwd()
 print(fileName)
@@ -19,8 +20,13 @@ print(fileName)
 ODM = xmlRoot(xmlTreeParse(fileName))
 #MD <- ODM[["Study"]][["MetaDataVersion"]]
 
-names(ODM)
+creationDateTime <- xmlAttrs(ODM)["CreationDateTime"]
+ODMVersion <- xmlAttrs(ODM)["ODMVersion"]
+cat(creationDateTime,ODMVersion)
+
+?fix
 nodes <- xmlChildren(ODM)
+
 studyNodes <- ODM[names(nodes) == "Study"]
 adminNodes <- ODM[names(nodes) == "AdminData"]
 defNodes <- ODM[names(nodes) == "ReferenceData"]   
@@ -28,8 +34,23 @@ clinNodes <- ODM[names(nodes) == "ClinicalData"]
 assocNodes <- ODM[names(nodes) == "Association"]
 sigNodes <- ODM[names(nodes) == "ds:Signature"]
 
+nStudies <- length(studyNodes)
+
+(GlobalVariables, BasicDefinitions?, MetaDataVersion*)
+
+for (study in studyNodes) {
+  OID <- xmlAttrs(study)["OID"]
+  studyNodes = xmlChildren(study)
+  studyNodes <- GlobalVariables <- studyNodes["GlobalVariables"]
+  DataType <- xmlAttrs(study)["DataType"]
+}  
+
+for (study in studyNodes) {
+  Name <- xmlAttrs(study)["Name"]
+  OID <- xmlAttrs(study)["OID"]
+  DataType <- xmlAttrs(study)["DataType"]
+}  
+
 cat("ODM: base=", basename(fileName), 
     "  items: ", length(N1), "\n", sep="")
 
-IDefnodes <- MD[names(xmlChildren(MD)) == "ItemDef"]
-CLnodes <- MD[names(xmlChildren(MD)) == "CodeList"]
